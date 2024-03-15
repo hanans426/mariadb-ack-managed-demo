@@ -3,6 +3,9 @@ Service:
   DeployType: ros
   TenantType: SingleTenant
   DeployMetadata:
+    AllowedRegions:
+      - cn-hangzhou
+      - cn-hongkong
     ServiceInstanceNameRule:
       Prefix: mariadb
     SupplierDeployMetadata:
