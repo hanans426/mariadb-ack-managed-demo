@@ -14,11 +14,11 @@
 
 本示例创建过程大约持续1分钟，当服务变成待提交后构建成功。
 
-### 服务使用前提准备
+## 服务使用前提准备
 本示例需要提前准备ack集群，且集群中需要安装mariadb-operator, 推荐使用[基础资源配置服务](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?spm=5176.24779694.0.0.6e894d22JHzSwH&type=user&ServiceId=service-8c2fa279b8ab4ba38414&ServiceVersion=beta)
 ，进行基础资源配置一键安装，可以选择已有ack集群也可以新建ack集群配置基础资源。如果是选择已有ack, 要确保ACK中已经安装阿里云Prometheus插件。
 
-注意：一个集群只需配置一次基础资源，且给集群打开删除保护，避免误删除。
+**注意**：一个集群只需配置一次基础资源，且给集群打开删除保护，避免误删除。
 
 ## 服务架构
 
@@ -29,9 +29,8 @@
 
 ![architecture.png](architecture.png)
 
-## Prometheus监控配置
-该服务支持配置Prometheus监控，服务实例部署成功后，服务商及其租户都能在控制台查看监控大盘, 开启Prometheus监控需要如下配置:
-(注意每个集群配置一次即可)
+## 开启Prometheus监控配置
+该服务支持配置Prometheus监控，服务实例部署成功后，服务商及其租户都能在控制台查看监控大盘, 开启Prometheus监控需要以下配置**(每个集群配置一次即可**)
 ### ACK集群中修改Prometheus的配置【需手动配置】
 1. 到[容器服务控制台](https://cs.console.aliyun.com/)找到自己的集群，修改集群中prom-agent的启动参数，在“arms-prom”的namespace下找到名为“arms-prometheus
    -ack-arms-prometheus”的Deployment，点击"查看yaml"，
@@ -44,12 +43,11 @@
 ![prom-2.png](prom-2.png)
 2.到[ARMS控制台](https://arms.console.aliyun.com/) 找到ACK集群对应的Promethues实例，也可以在容器控制台跳转到对应的Promethues实例，如下图所示：
 ![prom-3.png](prom-3.png)
-- 修改Promethues实例的"服务发现"配置，开启自动同步集群内ServiceMonitor，如下图所示：
+修改Promethues实例的"服务发现"配置，开启自动同步集群内ServiceMonitor，如下图所示：
   ![prom-4.png](prom-4.png)
-- 配置Promethues实例的采集规则，如下图所示，点击"编辑Prometheus.yaml"
+配置Promethues实例的采集规则，如下图所示，点击"编辑Prometheus.yaml"
   ![prom-5.png](prom-5.png)
-  添加以下内容：
-  将下边这段内容中值替换后，添加到Prometheus.yaml中
+  添加以下内容，将下边这段内容中值替换后，添加到Prometheus.yaml中
 ```yaml
 remote_write:
   - basic_auth:
@@ -57,7 +55,7 @@ remote_write:
       username: fake-AK-id
     url: http://xxxx  #当前Prometheus实例的remoteWrite内网地址
 ```
-username和password的值替换为您实际的AK信息，url的值替换为当前Prometheus实例的remoteWrite内网地址，可以在以下位置得到。
+其中username和password的值替换为您实际的AK信息，url的值替换为当前Prometheus实例的remoteWrite内网地址，可以在以下位置得到。
 ![prom-6.png](prom-6.png)
 Prometheus.yaml示例如下：
 ![prom-7.png](prom-7.png)
